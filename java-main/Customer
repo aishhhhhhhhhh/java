@@ -1,0 +1,28 @@
+public class Customer extends Person {
+    private int customerId;
+    protected double totalAmount;
+    
+    public Customer(String firstName, String lastName, int customerId) {
+        super(firstName, lastName);
+        this.customerId = customerId;
+        this.totalAmount = 0.0;
+    }
+    
+    public void purchase(double amount) {
+        totalAmount += amount;
+    }
+    
+    public int getCustomerId() {
+        return customerId;
+    }
+    
+    @Override
+    public void setEmail(String email) {
+        super.setEmail(email);
+    }
+    
+    @Override
+    public String toString() {
+        return super.toString() + "\nCustomer id  =  " + customerId + "\nTotal Amount  =  " + totalAmount;
+    }
+}

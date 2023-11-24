@@ -1,0 +1,39 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
+public class UDPClient {
+    private static final int SERVER_PORT = 8888;
+    private static final int BUFFER_SIZE = 1024;
+
+    public static void main(String[] args) {
+        try {
+            DatagramSocket socket = new DatagramSocket();
+            InetAddress serverAddress = InetAddress.getByName("localhost");
+
+            // Read student name from user
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("Enter student name: ");
+            String studentName = reader.readLine();
+
+            byte[] sendBuffer = studentName.getBytes();
+
+            DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, serverAddress, SERVER_PORT);
+            socket.send(sendPacket);
+
+            byte[] receiveBuffer = new byte[BUFFER_SIZE];
+            DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, BUFFER_SIZE);
+            socket.receive(receivePacket);
+
+            String mark = new String(receivePacket.getData()).trim();
+            System.out.println("Received mark from server: " + mark);
+
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

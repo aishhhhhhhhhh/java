@@ -1,0 +1,51 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
+public class UDPServer {
+    private static final int SERVER_PORT = 8888;
+    private static final int BUFFER_SIZE = 1024;
+
+    public static void main(String[] args) {
+        try (DatagramSocket socket = new DatagramSocket(SERVER_PORT)) {
+            System.out.println("Server running on port " + SERVER_PORT);
+
+            while (true) {
+                byte[] receiveBuffer = new byte[BUFFER_SIZE];
+                DatagramPacket receivePacket = new DatagramPacket(receiveBuffer, BUFFER_SIZE);
+                socket.receive(receivePacket);
+
+                String studentName = new String(receivePacket.getData()).trim();
+                System.out.println("Received request for student: " + studentName);
+
+                String mark = findMarkForStudent(studentName);
+                byte[] sendBuffer = mark.getBytes();
+
+                InetAddress clientAddress = receivePacket.getAddress();
+                int clientPort = receivePacket.getPort();
+                DatagramPacket sendPacket = new DatagramPacket(sendBuffer, sendBuffer.length, clientAddress, clientPort);
+                socket.send(sendPacket);
+
+                System.out.println("Sent mark to client: " + mark);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String findMarkForStudent(String studentName) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\ganes\\OneDrive\\Desktop\\mark.txt"))) {
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            String[] parts = line.split(",");
+                            if (parts.length == 2 && parts[0].trim().equals(studentName)) {
+                                return parts[1].trim();
+                            }
+                        }
+                }
+        return "Mark not found";
+    }
+}

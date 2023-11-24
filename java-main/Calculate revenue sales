@@ -1,0 +1,95 @@
+import javax.swing.*;
+import java.awt.event.*;
+
+public class TheatreRevenueCalculator extends JFrame {
+    private JTextField adultPriceField, adultQuantityField, childPriceField, childQuantityField;
+    private JButton calculateButton;
+    private JTextArea resultArea;
+
+    public TheatreRevenueCalculator() {
+        setTitle("Theatre Revenue Calculator");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(null);
+
+        JLabel adultPriceLabel = new JLabel("Price per adult ticket:");
+        adultPriceLabel.setBounds(20, 20, 150, 25);
+        panel.add(adultPriceLabel);
+
+        adultPriceField = new JTextField();
+        adultPriceField.setBounds(180, 20, 150, 25);
+        panel.add(adultPriceField);
+
+        JLabel adultQuantityLabel = new JLabel("Number of adult tickets sold:");
+        adultQuantityLabel.setBounds(20, 50, 200, 25);
+        panel.add(adultQuantityLabel);
+
+        adultQuantityField = new JTextField();
+        adultQuantityField.setBounds(220, 50, 150, 25);
+        panel.add(adultQuantityField);
+
+        JLabel childPriceLabel = new JLabel("Price per child ticket:");
+        childPriceLabel.setBounds(20, 80, 150, 25);
+        panel.add(childPriceLabel);
+
+        childPriceField = new JTextField();
+        childPriceField.setBounds(180, 80, 150, 25);
+        panel.add(childPriceField);
+
+        JLabel childQuantityLabel = new JLabel("Number of child tickets sold:");
+        childQuantityLabel.setBounds(20, 110, 200, 25);
+        panel.add(childQuantityLabel);
+
+        childQuantityField = new JTextField();
+        childQuantityField.setBounds(220, 110, 150, 25);
+        panel.add(childQuantityField);
+
+        calculateButton = new JButton("Calculate");
+        calculateButton.setBounds(150, 150, 100, 30);
+        panel.add(calculateButton);
+
+        resultArea = new JTextArea();
+        resultArea.setBounds(20, 190, 360, 80);
+        resultArea.setEditable(false);
+        panel.add(resultArea);
+
+        calculateButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                calculateRevenue();
+            }
+        });
+
+        add(panel);
+        setVisible(true);
+    }
+
+    private void calculateRevenue() {
+        try {
+            double adultPrice = Double.parseDouble(adultPriceField.getText());
+            int adultQuantity = Integer.parseInt(adultQuantityField.getText());
+            double childPrice = Double.parseDouble(childPriceField.getText());
+            int childQuantity = Integer.parseInt(childQuantityField.getText());
+
+            double totalAdultRevenue = adultPrice * adultQuantity;
+            double totalChildRevenue = childPrice * childQuantity;
+
+            double netAdultRevenue = totalAdultRevenue * 0.75; // 25% deduction for maintenance
+            double netChildRevenue = totalChildRevenue * 0.75;
+            double totalNetRevenue = netAdultRevenue + netChildRevenue;
+
+            resultArea.setText("Net revenue for adult tickets: $" + netAdultRevenue +
+                    "\nNet revenue for child tickets: $" + netChildRevenue +
+                    "\nTotal net revenue: $" + totalNetRevenue);
+
+        } catch (NumberFormatException ex) {
+            resultArea.setText("Please enter valid numeric values.");
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new TheatreRevenueCalculator());
+    }
+}

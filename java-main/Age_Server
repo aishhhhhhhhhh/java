@@ -1,0 +1,32 @@
+import java.io.*;
+import java.net.*;
+import java.time.LocalDate;
+import java.time.Period;
+
+class Server {
+    public static void main(String[] args) throws Exception {
+try (ServerSocket serverSocket = new ServerSocket(6789)) {
+        while (true) {
+            Socket connectionSocket = serverSocket.accept();
+
+            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+            DataOutputStream outToClient = new DataOutputStream(connectionSocket.getOutputStream());
+
+            String receivedDate = inFromClient.readLine();
+
+            int age = calculateAge(receivedDate); // Method to calculate age based on the current date
+
+            outToClient.writeBytes(Integer.toString(age) + '\n');
+        }
+}
+    }
+
+    private static int calculateAge(String date) {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate birthDate = LocalDate.parse(date);
+
+        Period period = Period.between(birthDate, currentDate);
+
+        return period.getYears();
+    }
+}

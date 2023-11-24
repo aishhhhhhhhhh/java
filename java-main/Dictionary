@@ -1,0 +1,68 @@
+import java.util.ArrayList;
+import java.util.Iterator;
+
+class Dictionary {
+    private String word;
+    private String meaning;
+
+    public Dictionary(String word, String meaning) {
+        this.word = word;
+        this.meaning = meaning;
+    }
+
+    @Override
+    public String toString() {
+        return "Word: " + word + ", Meaning: " + meaning;
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public String getMeaning() {
+        return meaning;
+    }
+}
+
+public class DictionaryDriver {
+    public static void main(String[] args) {
+        ArrayList<Dictionary> dictionaryList = new ArrayList<>();
+
+        // Creating Dictionary objects
+        Dictionary word1 = new Dictionary("Java", "A high-level programming language");
+        Dictionary word2 = new Dictionary("Python", "An interpreted, high-level, general-purpose programming language");
+        Dictionary word3 = new Dictionary("Java", "Another meaning for Java");
+        Dictionary word4 = new Dictionary("C++", "A general-purpose programming language");
+        Dictionary word5 = new Dictionary("Python", "Another meaning for Python");
+
+        // Adding objects to the ArrayList
+        dictionaryList.add(word1);
+        dictionaryList.add(word2);
+        dictionaryList.add(word3);
+        dictionaryList.add(word4);
+        dictionaryList.add(word5);
+
+        // Removing duplicate word meaning pairs
+        removeDuplicates(dictionaryList);
+
+        // Displaying the Dictionary objects
+        System.out.println("Dictionary Objects:");
+        for (Dictionary dictionary : dictionaryList) {
+            System.out.println(dictionary);
+        }
+    }
+
+    private static void removeDuplicates(ArrayList<Dictionary> dictionaryList) {
+        Iterator<Dictionary> iterator = dictionaryList.iterator();
+        ArrayList<String> uniqueWords = new ArrayList<>();
+
+        while (iterator.hasNext()) {
+            Dictionary currentWord = iterator.next();
+            if (uniqueWords.contains(currentWord.getWord())) {
+                iterator.remove();
+            } else {
+                uniqueWords.add(currentWord.getWord());
+            }
+        }
+    }
+}

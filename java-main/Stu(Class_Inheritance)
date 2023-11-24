@@ -1,0 +1,227 @@
+public class Course {
+    private String courseName;
+    private int credits;
+    private int noContactHrs;
+    private String typeOfCourse;
+    private String gradeScored;
+
+    // Default constructor
+    public Course() {
+    }
+
+    // Constructor with 4 arguments
+    public Course(String courseName, int credits, int noContactHrs, String typeOfCourse, String gradeScored) {
+        this.courseName = courseName;
+        this.credits = credits;
+        this.noContactHrs = noContactHrs;
+        this.typeOfCourse = typeOfCourse;
+        this.gradeScored = gradeScored;
+    }
+
+    // Getter methods
+    public String getName() {
+        return courseName;
+    }
+
+    public int getCredits() {
+        return credits;
+    }
+
+    public int getContactHr() {
+        return noContactHrs;
+    }
+
+    public String getGrade() {
+        return gradeScored;
+    }
+
+    public String getTypeCourse() {
+        return typeOfCourse;
+    }
+
+    // toString method
+    public String toString() {
+        return "Course Name: " + courseName + ", Credits: " + credits + ", Contact Hours: " + noContactHrs +
+                ", Type of Course: " + typeOfCourse + ", Grade Scored: " + gradeScored;
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+import java.util.ArrayList;
+
+public class Student {
+    private String name;
+    private int rollNo;
+    private int noCourses;
+    private double gpa;
+    private ArrayList<Course> courseEnrolled;
+
+    // Default constructor
+    public Student() {
+        courseEnrolled = new ArrayList<Course>();
+    }
+
+    // Constructor with 2 arguments
+    public Student(String name, int rollNo) {
+        this.name = name;
+        this.rollNo = rollNo;
+        courseEnrolled = new ArrayList<Course>();
+    }
+
+    // Getter methods
+    public int getNumCourse() {
+        return noCourses;
+    }
+
+    public double getGPA() {
+        return gpa;
+    }
+
+    // Add course to the array of CourseEnrolled
+    public void addCourse(Course course) {
+        // Check if course already exists in courseEnrolled
+        if (!courseEnrolled.contains(course)) {
+            // Validate course enrollment limits
+            if (noCourses < 30 && validateCourseLimits(course.getTypeCourse())) {
+                courseEnrolled.add(course);
+                noCourses++;
+                calculateGPA();
+                System.out.println("Course added successfully!");
+            } else {
+                System.out.println("Course enrollment limit exceeded or invalid course type!");
+            }
+        } else {
+            System.out.println("Course already enrolled!");
+        }
+    }
+
+    // Delete course from the array of CourseEnrolled
+    public void dropCourse(Course course) {
+        if (courseEnrolled.contains(course)) {
+            courseEnrolled.remove(course);
+            noCourses--;
+            calculateGPA();
+            System.out.println("Course dropped successfully!");
+        } else {
+            System.out.println("Course not found in the enrollment list!");
+        }
+    }
+
+    // Calculate GPA
+    private void calculateGPA() {
+        double totalCredits = 0.0;
+        double sumOfCreditsGrade = 0.0;
+
+        for (Course course : courseEnrolled) {
+            totalCredits += course.getCredits();
+            sumOfCreditsGrade += course.getCredits() * convertGradeToScore(course.getGrade());
+        }
+
+        gpa = sumOfCreditsGrade / totalCredits;
+    }
+
+    // Convert grade to score
+    private double convertGradeToScore(String grade) {
+        switch (grade) {
+            case "O":
+                return 10.0;
+            case "A":
+                return 9.0;
+            case "B":
+                return 8.0;
+            case "C":
+                return 7.0;
+            case "D":
+                return 6.0;
+            default:
+                return 0.0;
+        }
+    }
+
+    // Display enrolled courses by the student
+    public void displayCourseDetails() {
+        System.out.println("Enrolled Courses:");
+        for (Course course : courseEnrolled) {
+            System.out.println(course.toString());
+        }
+    }
+
+    // Display courses with credits less than 6
+    public void displayRedoCourse() {
+        System.out.println("Courses with credits less than 6:");
+        for (Course course : courseEnrolled) {
+            if (course.getCredits() < 6) {
+                System.out.println(course.toString());
+            }
+        }
+    }
+
+    // toStringmethod
+    public String toString() {
+        return "Name: " + name + ", Roll No: " + rollNo + ", GPA: " + gpa;
+    }
+
+    // Validate course enrollment limits
+    private boolean validateCourseLimits(String typeOfCourse) {
+        int theoryCount = 0;
+        int labCount = 0;
+        int labIntegratedTheoryCount = 0;
+
+        for (Course course : courseEnrolled) {
+            if (course.getTypeCourse().equals("Theory")) {
+                theoryCount++;
+            } else if (course.getTypeCourse().equals("Lab")) {
+                labCount++;
+            } else if (course.getTypeCourse().equals("LabIntegratedTheory")) {
+                labIntegratedTheoryCount++;
+            }
+        }
+
+        if (typeOfCourse.equals("Theory") && theoryCount >= 3) {
+            return false;
+        } else if (typeOfCourse.equals("Lab") && labCount >= 2) {
+            return false;
+        } else if (typeOfCourse.equals("LabIntegratedTheory") && labIntegratedTheoryCount >= 2) {
+            return false;
+        }
+
+        return true;
+    }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+import java.util.Scanner;
+
+public class StudentDriver {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Create a Course object
+        Course course1 = new Course("Mathematics", 4, 4, "Theory", "A");
+
+        // Create a Student object
+        System.out.print("Enter student name: ");
+        String name = scanner.nextLine();
+        System.out.print("Enter student roll number: ");
+        int rollNo = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
+
+        Student student1 = new Student(name, rollNo);
+
+        // Add course to the student's enrollment list
+        student1.addCourse(course1);
+
+        // Display student details
+        System.out.println(student1.toString());
+
+        // Display enrolled courses by the student
+        student1.displayCourseDetails();
+
+        // Display courses with credits less than 6
+        student1.displayRedoCourse();
+
+        scanner.close();
+    }
+}

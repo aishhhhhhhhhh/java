@@ -1,0 +1,36 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class LowerBoundedWildcardExample {
+
+    // Method that adds integers to a list of any type super of Integer
+    public static void addIntegers(List<? super Integer> list, int n) {
+        for (int i = 1; i <= n; i++) {
+            list.add(i);
+        }
+    }
+
+    public static void main(String[] args) {
+        List<Object> objectList = new ArrayList<>();
+        List<Number> numberList = new ArrayList<>();
+
+        // Call the method with lists of different supertypes of Integer
+        addIntegers(objectList, 5);
+        addIntegers(numberList, 3);
+
+        // Display the contents of the lists
+        System.out.println("Object List: " + objectList);
+        System.out.println("Number List: " + numberList);
+
+        // Example with a wildcard in a method parameter
+        List<? super Integer> wildcardIntegers = new ArrayList<>();
+        // You can assign it to a List of Integer or any supertype of Integer
+        wildcardIntegers = objectList;
+        wildcardIntegers = numberList;
+        // You can add elements of type Integer or any subtype of Integer
+        wildcardIntegers.add(10);
+        wildcardIntegers.add(20);
+        // But you can't safely read elements from it without casting
+        // Integer value = wildcardIntegers.get(0); // This would result in a compilation error
+    }
+}

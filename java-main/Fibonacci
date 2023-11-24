@@ -1,0 +1,53 @@
+class FibonacciTask extends Thread {
+    private int n;
+
+    public FibonacciTask(int n) {
+        this.n = n;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Thread " + Thread.currentThread().getId() + " is generating Fibonacci sequence with n = " + n);
+        long[] fibonacci = new long[n];
+        fibonacci[0] = 0;
+        fibonacci[1] = 1;
+
+        for (int i = 2; i < n; i++) {
+            fibonacci[i] = fibonacci[i - 1] + fibonacci[i - 2];
+        }
+
+        System.out.print("Fibonacci sequence (Thread " + Thread.currentThread().getId() + "): ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(fibonacci[i] + " ");
+        }
+        System.out.println();
+    }
+}
+
+public class MultiThreadFibonacci {
+    public static void main(String[] args) {
+        // Prompt the user for the number of Fibonacci numbers (n)
+        java.util.Scanner scanner = new java.util.Scanner(System.in);
+        System.out.print("Enter the value of n for Fibonacci sequence: ");
+        int n = scanner.nextInt();
+        scanner.close();
+
+        // Create multiple threads to generate Fibonacci sequences
+        Thread[] threads = new Thread[n];
+        for (int i = 0; i < n; i++) {
+            threads[i] = new FibonacciTask(i + 2); // We start from 2 since Fibonacci sequence has 2 initial values
+            threads[i].start();
+        }
+
+        // Wait for all threads to finish
+        for (int i = 0; i < n; i++) {
+            try {
+                threads[i].join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("All threads have completed.");
+    }
+}

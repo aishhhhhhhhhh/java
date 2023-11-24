@@ -1,0 +1,53 @@
+import java.io.*;
+
+// Define a class that implements Serializable interface
+class Person implements Serializable {
+    private static final long serialVersionUID = 1L; // Used for version control during deserialization
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String toString() {
+        return "Person [name=" + name + ", age=" + age + "]";
+    }
+}
+
+public class SerializationExample {
+
+    public static void main(String[] args) {
+        // Serialize an object to a file
+        serializeObjectToFile();
+
+        // Deserialize an object from a file
+        deserializeObjectFromFile();
+    }
+
+    private static void serializeObjectToFile() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("person.ser"))) {
+            // Create a Person object
+            Person person = new Person("John Doe", 25);
+
+            // Serialize the object to a file
+            oos.writeObject(person);
+
+            System.out.println("Object has been serialized to person.ser");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void deserializeObjectFromFile() {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("person.ser"))) {
+            // Deserialize the object from the file
+            Person person = (Person) ois.readObject();
+
+            System.out.println("Object has been deserialized: " + person);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,0 +1,110 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class StudentDataManagement extends JFrame {
+    private JTextField nameField;
+    private JRadioButton deptCSE, deptECE, deptMECH, male, female;
+    private JCheckBox programming, design, robotics, sports, music, reading;
+    private JComboBox<String> hobbiesComboBox;
+
+    public StudentDataManagement() {
+        setTitle("Student Data Management");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new FlowLayout());
+
+        // Logo
+        ImageIcon logoIcon = new ImageIcon("your_logo_path.png"); // Replace 'your_logo_path.png' with the path to your logo
+        JLabel logoLabel = new JLabel(logoIcon);
+        add(logoLabel);
+
+        // Name field
+        JLabel nameLabel = new JLabel("Name:");
+        nameField = new JTextField(20);
+        add(nameLabel);
+        add(nameField);
+
+        // Department radio buttons
+        JLabel deptLabel = new JLabel("Dept:");
+        deptCSE = new JRadioButton("CSE");
+        deptECE = new JRadioButton("ECE");
+        deptMECH = new JRadioButton("MECH");
+        ButtonGroup deptGroup = new ButtonGroup();
+        deptGroup.add(deptCSE);
+        deptGroup.add(deptECE);
+        deptGroup.add(deptMECH);
+        add(deptLabel);
+        add(deptCSE);
+        add(deptECE);
+        add(deptMECH);
+
+        // Gender radio buttons
+        JLabel genderLabel = new JLabel("Gender:");
+        male = new JRadioButton("Male");
+        female = new JRadioButton("Female");
+        ButtonGroup genderGroup = new ButtonGroup();
+        genderGroup.add(male);
+        genderGroup.add(female);
+        add(genderLabel);
+        add(male);
+        add(female);
+
+        // Area of interest checkboxes
+        JLabel areaOfInterestLabel = new JLabel("Area of Interest:");
+        programming = new JCheckBox("Programming");
+        design = new JCheckBox("Design");
+        robotics = new JCheckBox("Robotics");
+        add(areaOfInterestLabel);
+        add(programming);
+        add(design);
+        add(robotics);
+
+        // Hobbies combo box
+        JLabel hobbiesLabel = new JLabel("Hobbies:");
+        String[] hobbies = {"Sports", "Music", "Reading"};
+        hobbiesComboBox = new JComboBox<>(hobbies);
+        add(hobbiesLabel);
+        add(hobbiesComboBox);
+
+        // Buttons
+        JButton submitButton = new JButton("Submit");
+        JButton confirmButton = new JButton("Confirm");
+        JButton exitButton = new JButton("Exit");
+        add(submitButton);
+        add(confirmButton);
+        add(exitButton);
+
+        // ActionListeners for buttons
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Perform actions when submit is clicked
+                // Retrieve data and process as needed
+                System.out.println("Submitted");
+            }
+        });
+
+        confirmButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Perform actions when confirm is clicked
+                // Retrieve data and process as needed
+                System.out.println("Confirmed");
+            }
+        });
+
+        exitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Perform actions when exit is clicked
+                // Exit the application
+                System.exit(0);
+            }
+        });
+
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new StudentDataManagement());
+    }
+}

@@ -1,0 +1,31 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class UpperBoundedWildcardExample {
+
+    // Method that accepts a list of any type extending Number
+    public static double sumList(List<? extends Number> numbers) {
+        double sum = 0.0;
+        for (Number num : numbers) {
+            sum += num.doubleValue();
+        }
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        List<Integer> integers = List.of(1, 2, 3);
+        List<Double> doubles = List.of(1.5, 2.5, 3.5);
+
+        // Call the method with lists of different numeric types
+        System.out.println("Sum of integers: " + sumList(integers));
+        System.out.println("Sum of doubles: " + sumList(doubles));
+
+        // Example with a wildcard in a method parameter
+        List<? extends Number> wildcardNumbers = new ArrayList<>();
+        // You can assign it to a List of any subtype of Number
+        wildcardNumbers = integers;
+        wildcardNumbers = doubles;
+        // But you cannot add elements to it (except for null)
+        // wildcardNumbers.add(4); // This would result in a compilation error
+    }
+}

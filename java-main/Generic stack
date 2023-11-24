@@ -1,0 +1,74 @@
+import java.util.EmptyStackException;
+
+public class GenericStack<T> {
+
+    private Node<T> top;
+
+    // Node class to represent elements in the stack
+    private static class Node<T> {
+        private T data;
+        private Node<T> next;
+
+        public Node(T data) {
+            this.data = data;
+        }
+    }
+
+    // Check if the stack is empty
+    public boolean isEmpty() {
+        return top == null;
+    }
+
+    // Push an element onto the stack
+    public void push(T item) {
+        Node<T> newNode = new Node<>(item);
+        newNode.next = top;
+        top = newNode;
+    }
+
+    // Pop an element from the stack
+    public T pop() {
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        }
+        T data = top.data;
+        top = top.next;
+        return data;
+    }
+
+    // Peek at the top element of the stack without removing it
+    public T peek() {
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        }
+        return top.data;
+    }
+
+    // Display the elements of the stack
+    public void display() {
+        Node<T> current = top;
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+
+    // Example usage
+    public static void main(String[] args) {
+        GenericStack<Integer> stack = new GenericStack<>();
+
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+
+        System.out.println("Stack elements:");
+        stack.display();
+
+        System.out.println("Peek: " + stack.peek());
+        System.out.println("Pop: " + stack.pop());
+
+        System.out.println("Stack elements after pop:");
+        stack.display();
+    }
+}

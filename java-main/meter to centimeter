@@ -1,0 +1,66 @@
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class LengthConverter extends JFrame {
+    private JTextField meterField;
+    private JTextField cmField;
+
+    public LengthConverter() {
+        super("Length Converter");
+
+        JPanel panel = new JPanel();
+        getContentPane().add(panel);
+
+        JLabel meterLabel = new JLabel("Meter:");
+        panel.add(meterLabel);
+
+        meterField = new JTextField(10);
+        panel.add(meterField);
+
+        JLabel cmLabel = new JLabel("Centimeter:");
+        panel.add(cmLabel);
+
+        cmField = new JTextField(10);
+        panel.add(cmField);
+
+        meterField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    double meter = Double.parseDouble(meterField.getText());
+                    double cm = meter * 100;
+                    cmField.setText(String.valueOf(cm));
+                } catch (NumberFormatException ex) {
+                    cmField.setText("Invalid input");
+                }
+            }
+        });
+
+        cmField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    double cm = Double.parseDouble(cmField.getText());
+                    double meter = cm / 100;
+                    meterField.setText(String.valueOf(meter));
+                } catch (NumberFormatException ex) {
+                    meterField.setText("Invalid input");
+                }
+            }
+        });
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new LengthConverter();
+            }
+        });
+    }
+}

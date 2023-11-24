@@ -1,0 +1,70 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class FutureValueCalculator extends JFrame {
+
+    private JTextField investmentField, yearsField, interestRateField, futureValueField;
+
+    public FutureValueCalculator() {
+        setTitle("Future Value Calculator");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 200);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 2));
+
+        panel.add(new JLabel("Investment Amount:"));
+        investmentField = new JTextField();
+        panel.add(investmentField);
+
+        panel.add(new JLabel("Number of Years:"));
+        yearsField = new JTextField();
+        panel.add(yearsField);
+
+        panel.add(new JLabel("Annual Interest Rate (%):"));
+        interestRateField = new JTextField();
+        panel.add(interestRateField);
+
+        JButton calculateButton = new JButton("Calculate");
+        calculateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                calculateFutureValue();
+            }
+        });
+
+        panel.add(calculateButton);
+
+        panel.add(new JLabel("Future Value:"));
+        futureValueField = new JTextField();
+        futureValueField.setEditable(false);
+        panel.add(futureValueField);
+
+        getContentPane().add(panel);
+    }
+
+    private void calculateFutureValue() {
+        try {
+            double investmentAmount = Double.parseDouble(investmentField.getText());
+            int numberOfYears = Integer.parseInt(yearsField.getText());
+            double annualInterestRate = Double.parseDouble(interestRateField.getText());
+
+            double monthlyInterestRate = annualInterestRate / 12 / 100;
+            int numberOfMonths = numberOfYears * 12;
+
+            double futureValue = investmentAmount * Math.pow((1 + monthlyInterestRate), numberOfMonths);
+            futureValueField.setText(String.format("%.2f", futureValue));
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Please enter valid numeric values.");
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            FutureValueCalculator calculator = new FutureValueCalculator();
+            calculator.setVisible(true);
+        });
+    }
+}
